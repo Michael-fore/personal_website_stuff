@@ -1,6 +1,7 @@
 import dash
 from PIL import Image  
 import PIL  
+from skimage import io as i
 from dash_canvas import DashCanvas
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, Output, State
@@ -8,12 +9,13 @@ from dash_canvas.utils import array_to_data_url, parse_jsonstring
 import dash_core_components as dcc
 import dash_html_components as html
 from flask_stuff import server
-from ml import google_classify
+from ml import google_classify, combine
 import base64
 from io import BytesIO
 from css import *
 import datetime as dt
 import io, re
+import numpy as np
 
 app = dash.Dash(
     __name__,
@@ -29,10 +31,14 @@ app.layout = html.Div([
     html.Div([DashCanvas(id='canvas_image',
                tool='line',
                lineWidth=5,
-               lineColor='red'),
-    html.Button(id='classify-button'),
+               lineColor='red',
+               width=500,
+               height=500,
+               goButtonTitle='Classify me!'),
+    html.Button('Classify the image!', id='classify-button'),
 
-    dcc.Loading(html.Div(id='classification'))]),
+    dcc.Loading(html.Div(id='classification')),
+    dcc.Loading(html.Div(id='classification-2')) ]),
 
     dcc.Upload(id='upload',
                 children=html.Div([
@@ -64,6 +70,26 @@ def classify(data):
     return str(google_classify(convert_base46(data)))
 
 
+@app.callback(Output('classification-2','children'),
+                [Input('canvas_image','json_data')],
+                [State('canvas_image','image_content')])
+def classify(alteration, image):
+    
+    prevent_update(image)
+    
+    mask = parse_jsonstring(alteration)
+    with open('bug.txt', 'w') as f:
+        f.write(str(mask))
+    image2 = array_to_data_url((255 * mask).astype(np.uint8))
+    
+    
+    if alteration:
+        return str(google_classify(combine(convert_base46(image),convert_base46(image2))))
+    
+    
+    
+    
+    return str(google_classify(convert_base46(image)))
 
 
 
