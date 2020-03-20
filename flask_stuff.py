@@ -6,4 +6,8 @@ server = flask.Flask(__name__)
 def index():
     return 'Hello Flask app'
 
+@server.route('/test')
+def index():
+    return '''Hello Flask app'''
+
 
