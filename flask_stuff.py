@@ -7,7 +7,7 @@ def index():
     return 'Hello Flask app'
 
 @server.route('/test')
-def index():
+def test():
     return '''Hello Flask app'''
 
 

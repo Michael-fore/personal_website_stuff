@@ -2,9 +2,11 @@ import torchvision.models as models
 import torch
 import torchvision.transforms as transform
 import json
+import pandas as pd
 from dash.exceptions import PreventUpdate
 from PIL import Image
 import PIL
+
 
 googlenet = models.googlenet(pretrained=True)
 googlenet.eval()
@@ -56,7 +58,10 @@ def results(network_output, top_k = None):
     for final, result in zip(results, value[0]):
         final_results.append((final, result))
 
-    return final_results
+
+    return pd.DataFrame(zip(results,value[0]), 
+                        index = results, 
+                        columns = ['Category','Confidence Prediciton'])
     
 
 def combine(im1, im2):
@@ -71,7 +76,6 @@ def google_classify(image_path, top_k = None):
     img = img_load(image_path)
     
     output = googlenet(img)
-
-    return results(output, top_k)
-
+    print(results(output, top_k))
+    return pd.DataFrame(results(output, top_k))
 #print(google_classify('./imgs/cat.jpg'))
