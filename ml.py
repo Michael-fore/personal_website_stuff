@@ -5,6 +5,7 @@ import json
 import pandas as pd
 from dash.exceptions import PreventUpdate
 from PIL import Image
+from io import BytesIO
 import PIL
 
 
@@ -61,7 +62,7 @@ def results(network_output, top_k = None):
 
     return pd.DataFrame(zip(results,value[0]), 
                         index = results, 
-                        columns = ['Category','Confidence Prediciton'])
+                        columns = ['Category','Confidence Prediction'])
     
 
 def combine(im1, im2):
@@ -76,6 +77,6 @@ def google_classify(image_path, top_k = None):
     img = img_load(image_path)
     
     output = googlenet(img)
-    print(results(output, top_k))
+    
     return pd.DataFrame(results(output, top_k))
-#print(google_classify('./imgs/cat.jpg'))
+
