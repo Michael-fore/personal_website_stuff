@@ -12,7 +12,7 @@ export default function Table(props){
         data={[{
             type: 'table',
             header: {
-              values: [["<b>Q1</b>"], ["<b>Q1</b>"],["<b>Q1</b>"]]
+              values: [["Category"], ["Confidence"]]
             },
             cells: {
               values: values,

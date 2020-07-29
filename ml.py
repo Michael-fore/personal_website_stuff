@@ -9,6 +9,12 @@ from io import BytesIO
 import PIL
 
 
+class DeepModels:
+
+    modes = ['AlexNet','DenseNet',]
+    def __init__(self):
+        
+
 googlenet = models.googlenet(pretrained=True)
 googlenet.eval()
 

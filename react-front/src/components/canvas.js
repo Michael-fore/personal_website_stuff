@@ -1,7 +1,14 @@
 import React, {useRef, useEffect, useState} from 'react'
-import pic from './10_lg.jpg' 
+import pic from './img/10_lg.jpg' 
 import axios from 'axios'
 import Table from './table'
+import {Box,
+        Badge
+        } from "@chakra-ui/core";
+
+//TODO
+//Fix curson desync on large rphotos, canvas rerence prolly isn'y working
+//Add other models to use
 
 export default function Canvas(props){
 
@@ -77,8 +84,6 @@ export default function Canvas(props){
         }
         
     }
-
-
     
     const loadImage = () =>{
         const canvas = canvasRef.current
@@ -152,39 +157,48 @@ export default function Canvas(props){
     return(
         <div >
             <div>
-                    <button onClick = {() => {inputRef.current.click()}}> Upload Your Own Image</button>
+                    <button class="button" onClick = {() => {inputRef.current.click()}}> Upload Your Own Image</button>
 
                     <input type='File' onChange={uploadImage}
                     style={{display:'none'}}
                     ref = {inputRef}></input> 
 
-                    <button onClick = {sendImage}> Analyze Image</button>
-                
-                <div class="slidecontainer">
-
-                    <input type="range" 
-                    min="1" max="100" 
-                    step = "1" class="slider" 
-                    id="myRange"
-                    onChange={sliderValue}></input>
-
-                </div>
-                
-                <input type="color" 
-                name="Brush Color"
-                onChange = {colorPicker}
-                value="#00000"></input>
-
-                <button onClick = {loadImage}> Reset Image</button>
+                    <button class="button" onClick = {sendImage}> Analyze Image</button>
+                                 
+               
+                <button class="button"  onClick = {loadImage}> Reset Image</button>
             </div>
-            <div>
+            <div className='canvasGrid'>
             <canvas 
                 onMouseDown = {beginDraw}
                 onMouseUp = {endDraw}
                 onMouseMove = {draw}
                 ref = {canvasRef}></canvas>
 
+                <div className='colorGrid'>       
+                    <Box>
+                    <Badge variant="outline">Brush Size</Badge>
+                    <div class="slidecontainer">
+                        <input type="range" 
+                        min="1" max="100" 
+                        step = "1" class="slider" 
+                        id="myRange"
+                        onChange={sliderValue}></input>
+                    </div>
+                </Box>   
+                <Box><div className='colorGrid'> 
+                    <Badge variant="outline">Brush Color</Badge>                    
+                    <input type="color" 
+                    name="Brush Color"
+                    onChange = {colorPicker}
+                    value="#00000"
+                    className='colorPicker'></input> 
+                    </div>  
+                </Box>
                 <Table categories = {categories} confidence = {confidence}></Table>
+                </div>
+                            
+                
             </div>
         </div>
     )
